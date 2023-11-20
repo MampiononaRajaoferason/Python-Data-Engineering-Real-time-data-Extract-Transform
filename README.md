@@ -13,25 +13,7 @@ This Python project focuses on real-time data extraction from the CryptoCompare 
 
 ## Usage
 
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/your-username/crypto-api-extraction.git
-    ```
-
-2. Install dependencies:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3. Run the script:
-
-    ```bash
-    python crypto_extraction.py
-    ```
-
-   The script will execute every 30 seconds, extracting real-time data from the CryptoCompare API.
+The script will execute every 30 seconds, extracting real-time data from the CryptoCompare API.
 
 ## Features
 
