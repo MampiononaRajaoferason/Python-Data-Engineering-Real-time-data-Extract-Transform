@@ -11,7 +11,7 @@ import requests
 import time
 from datetime import datetime
 import json
-
+import os
 
 #global data
 #create pretty table object
@@ -25,24 +25,39 @@ file_path ='/media/rajaoferason/LENOVO/Mampi/Mampionona_Doc/Ketrika/DE/Projects/
 url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH&tsyms=USD,EUR&api_key='
 
 
-def pull_currency_data(url , apikey, file_name):
-    
-    #global data
-    api_endpoint = url+apikey
+def pull_currency_data(url, apikey, file_name):
+    api_endpoint = url + apikey
     data = requests.get(api_endpoint).json()
+    
     entry = {
-        'date':  datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'data': data
     }    
+
+    # Load existing data
+    existing_data = []
     
-        
-    with open(file_name, 'a') as file:
-        json.dump(entry, file)
-        
-    file.close()
+    # Check if the file exists
+    if os.path.isfile(file_name):
+        # Load existing data if the file exists
+        with open(file_name, 'r') as file:
+            try:
+                print("====testing try ======")
+                existing_data = json.load(file)
+                print("=exisitingdata=", existing_data)
+            except json.JSONDecodeError:
+                print("****exception****")
+                # Handle the case when the file is empty or not valid JSON
+                pass
 
-schedule.every(30).seconds.do(pull_currency_data, url, KeyVal, 'output.txt') 
+    # Append new entry
+    existing_data.append(entry)
+    print("________-appended_data________", existing_data)
+    # Save the updated data back to the file, ensuring it's a JSON array
+    with open(file_name, 'w') as file:
+        json.dump(existing_data, file, indent=2)
 
+schedule.every(30).seconds.do(pull_currency_data, url, KeyVal, 'output.json') 
 
 while True:
     schedule.run_pending()
